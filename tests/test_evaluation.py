@@ -1,6 +1,7 @@
 from langchain_core.messages import AIMessage
 
 from app.chatbot import PUBLIC_ERROR_MESSAGE
+from scripts.evaluate import dataset_examples_match, example_create_payload, example_identity
 from app.evaluation import (
     deterministic_scores,
     judge_relevance,
@@ -74,6 +75,27 @@ def test_error_example_requires_the_safe_message():
         {"error": "Traceback: secret API_KEY"},
         {"expect_error": True},
     )["score"] == 0
+
+
+def test_dataset_upload_keeps_labels_on_both_langsmith_field_names():
+    example = {
+        "inputs": {"question": "What time is it now?", "demo_fault": None},
+        "outputs": {"expect_tool": True, "category": "datetime"},
+        "metadata": {"category": "datetime"},
+    }
+    current = example_create_payload(example, field_names={"inputs", "reference_outputs", "metadata"})
+    older = example_create_payload(example, field_names={"inputs", "outputs", "metadata"})
+    assert current["reference_outputs"]["expect_tool"] is True
+    assert "outputs" not in current
+    assert older["outputs"]["category"] == "datetime"
+    assert "reference_outputs" not in older
+
+
+def test_dataset_sync_notices_missing_expected_labels():
+    local = [example_identity({"question": "What time is it now?"}, {"expect_tool": True, "category": "datetime"})]
+    stored_without_labels = [example_identity({"question": "What time is it now?"}, None)]
+    assert dataset_examples_match(stored_without_labels, local) is False
+    assert dataset_examples_match(local, local) is True
 
 
 def test_relevance_judge_parses_model_json():

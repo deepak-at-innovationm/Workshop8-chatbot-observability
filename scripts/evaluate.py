@@ -7,6 +7,7 @@ Usage:
 """
 
 import argparse
+import json
 import sys
 import uuid
 from pathlib import Path
@@ -78,7 +79,10 @@ def _print_summary(rows: list[dict]) -> int:
             mark = "pass" if score["score"] == 1 else "fail"
             if score["score"] != 1:
                 failures += 1
-            parts.append(f"{score['key']}={mark}")
+            label = f"{score['key']}={mark}"
+            if score["score"] != 1 and score.get("comment"):
+                label = f"{label}: {score['comment']}"
+            parts.append(label)
         print(f"- {question}")
         print("  " + ", ".join(parts))
     total = sum(1 for row in rows for score in row["scores"] if score["score"] is not None)
@@ -155,7 +159,38 @@ def _langsmith_evaluators(timezone_name: str, judge_model, use_judge: bool):
     return evaluators
 
 
+def example_create_payload(example: dict, *, field_names: set[str]) -> dict:
+    """Build one dataset row for the installed LangSmith client.
+
+    LangSmith 0.8 stores expected labels in ``outputs``. Later clients renamed
+    that field to ``reference_outputs`` and ignore the old name on create.
+    Sending the wrong key uploads the question with empty labels.
+    """
+    payload = {
+        "inputs": example["inputs"],
+        "metadata": example.get("metadata") or {},
+    }
+    if "reference_outputs" in field_names:
+        payload["reference_outputs"] = example["outputs"]
+    else:
+        payload["outputs"] = example["outputs"]
+    return payload
+
+
+def example_identity(inputs: dict | None, outputs: dict | None) -> tuple[str, str]:
+    """Stable comparison key for inputs and expected labels."""
+    return (
+        json.dumps(inputs or {}, sort_keys=True),
+        json.dumps(outputs or {}, sort_keys=True),
+    )
+
+
+def dataset_examples_match(remote_rows: list[tuple[str, str]], local_rows: list[tuple[str, str]]) -> bool:
+    return sorted(remote_rows) == sorted(local_rows)
+
+
 def _sync_dataset(client, dataset_name: str, examples: list[dict]):
+    from langsmith.schemas import ExampleCreate
     from langsmith.utils import LangSmithNotFoundError
 
     try:
@@ -166,21 +201,15 @@ def _sync_dataset(client, dataset_name: str, examples: list[dict]):
             description="General chatbot demo: everyday questions, datetime tool use, and one error case.",
         )
     remote = list(client.list_examples(dataset_id=dataset.id))
-    local_questions = [example["inputs"]["question"] for example in examples]
-    remote_questions = [(example.inputs or {}).get("question") for example in remote]
-    if remote_questions != local_questions:
+    remote_rows = [example_identity(example.inputs, example.outputs) for example in remote]
+    local_rows = [example_identity(example["inputs"], example["outputs"]) for example in examples]
+    if not dataset_examples_match(remote_rows, local_rows):
         if remote:
             client.delete_examples([example.id for example in remote])
+        field_names = set(ExampleCreate.model_fields)
         client.create_examples(
             dataset_id=dataset.id,
-            examples=[
-                {
-                    "inputs": example["inputs"],
-                    "reference_outputs": example["outputs"],
-                    "metadata": example.get("metadata") or {},
-                }
-                for example in examples
-            ],
+            examples=[example_create_payload(example, field_names=field_names) for example in examples],
         )
     return dataset
 
