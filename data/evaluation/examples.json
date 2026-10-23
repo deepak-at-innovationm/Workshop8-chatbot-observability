@@ -1,0 +1,85 @@
+[
+  {
+    "inputs": {"question": "What is MLOps?"},
+    "outputs": {
+      "expect_tool": false,
+      "expect_error": false,
+      "category": "general",
+      "criteria": "Explains MLOps as the practice of deploying, monitoring, and maintaining machine learning systems."
+    },
+    "metadata": {"category": "general"}
+  },
+  {
+    "inputs": {"question": "What is a machine learning model registry used for?"},
+    "outputs": {
+      "expect_tool": false,
+      "expect_error": false,
+      "category": "general",
+      "criteria": "Describes a model registry as a place to store, version, and promote trained models."
+    },
+    "metadata": {"category": "general"}
+  },
+  {
+    "inputs": {"question": "Explain model drift in one or two sentences."},
+    "outputs": {
+      "expect_tool": false,
+      "expect_error": false,
+      "category": "general",
+      "criteria": "Explains model drift as a change in data or the relationship between inputs and the target that degrades a deployed model."
+    },
+    "metadata": {"category": "general"}
+  },
+  {
+    "inputs": {"question": "What is CI/CD for machine learning?"},
+    "outputs": {
+      "expect_tool": false,
+      "expect_error": false,
+      "category": "general",
+      "criteria": "Describes continuous integration and continuous delivery for machine learning pipelines, not the current time."
+    },
+    "metadata": {"category": "general"}
+  },
+  {
+    "inputs": {"question": "What is the current date and time?"},
+    "outputs": {
+      "expect_tool": true,
+      "expect_error": false,
+      "category": "datetime",
+      "criteria": "Calls get_current_datetime and reports the tool's date and time."
+    },
+    "metadata": {"category": "datetime"}
+  },
+  {
+    "inputs": {"question": "What time is it now?"},
+    "outputs": {
+      "expect_tool": true,
+      "expect_error": false,
+      "category": "datetime",
+      "criteria": "Calls get_current_datetime and reports the current time."
+    },
+    "metadata": {"category": "datetime"}
+  },
+  {
+    "inputs": {"question": "Tell me today's date."},
+    "outputs": {
+      "expect_tool": true,
+      "expect_error": false,
+      "category": "datetime",
+      "criteria": "Calls get_current_datetime and reports today's date."
+    },
+    "metadata": {"category": "datetime"}
+  },
+  {
+    "inputs": {
+      "question": "Simulate a model failure.",
+      "demo_fault": "model"
+    },
+    "outputs": {
+      "expect_tool": false,
+      "expect_error": true,
+      "category": "error",
+      "criteria": "Returns a safe error message and does not expose a stack trace or credentials."
+    },
+    "metadata": {"category": "error"}
+  }
+]

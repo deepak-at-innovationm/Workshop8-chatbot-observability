@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MLOps Chatbot</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+  <main>
+    <header>
+      <div>
+        <p class="eyebrow">LangSmith demo</p>
+        <h1>MLOps Chatbot</h1>
+        <p class="lede">OpenAI answers questions and calls one clock tool. Traces go to LangSmith when tracing is enabled. History stays in this server process and resets on restart.</p>
+      </div>
+      <button id="new-chat" type="button">New chat</button>
+    </header>
+
+    <p id="meta" class="meta">Session: new</p>
+    <p id="error" class="error" hidden></p>
+    <section id="messages" aria-live="polite"></section>
+
+    <form id="form">
+      <label class="sr-only" for="input">Message</label>
+      <input id="input" name="message" type="text" placeholder="Ask a question" autocomplete="off" required />
+      <button id="send" type="submit">Send</button>
+    </form>
+    <p id="loading" class="loading" hidden>Waiting for the assistant…</p>
+    <p id="fault-row" class="fault-row" hidden>
+      <button id="fault" type="button">Simulate traced error</button>
+    </p>
+  </main>
+  <script src="/static/app.js"></script>
+</body>
+</html>
