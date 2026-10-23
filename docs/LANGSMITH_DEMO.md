@@ -54,7 +54,7 @@ The trace inputs do not include API keys. The service object is removed before t
 In the chat UI, send:
 
 ```text
-What is MLOps?
+What is the capital of France?
 ```
 
 In LangSmith, open the new `chat_request`. You should see `decide_tool_use` and no `get_current_datetime` child. The assistant reply is the `chat_request` output. The web page shows `tool_used` only when a tool ran, so this reply has no tool note.
@@ -77,7 +77,7 @@ The answer in the UI should match the tool's date, time, and `Asia/Kolkata` time
 
 Other prompts that should take the same path: `What time is it now?` and `Tell me today's date.`
 
-A question such as `What is CI/CD for machine learning?` should not add a tool run.
+A question such as `What is a time zone?` should not add a tool run.
 
 ### 3. Follow a thread
 

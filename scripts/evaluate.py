@@ -163,7 +163,7 @@ def _sync_dataset(client, dataset_name: str, examples: list[dict]):
     except LangSmithNotFoundError:
         dataset = client.create_dataset(
             dataset_name,
-            description="MLOps chatbot demo: general questions, datetime tool use, and one error case.",
+            description="General chatbot demo: everyday questions, datetime tool use, and one error case.",
         )
     remote = list(client.list_examples(dataset_id=dataset.id))
     local_questions = [example["inputs"]["question"] for example in examples]

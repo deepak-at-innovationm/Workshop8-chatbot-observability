@@ -96,7 +96,7 @@ Open [http://127.0.0.1:8000](http://127.0.0.1:8000).
 
 Useful questions:
 
-- `What is MLOps?` — answered by the model, no tool call.
+- `What is the capital of France?` — answered by the model, no tool call.
 - `What is the current date and time?` — the model should call `get_current_datetime`.
 - `What time is it now?`
 - `Tell me today's date.`
@@ -122,7 +122,7 @@ That command calls OpenAI and consumes API quota. It checks that a knowledge que
 
 ## Evaluation
 
-The dataset is `data/evaluation/examples.json` (8 examples): general MLOps questions, datetime questions, and one forced model failure.
+The dataset is `data/evaluation/examples.json` (8 examples): everyday general questions, datetime questions, and one forced model failure.
 
 ```bash
 source .venv/bin/activate
@@ -196,7 +196,7 @@ On Python 3.14, FastAPI may print a warning about Pydantic v1 compatibility. The
 - **No traces** — startup logs `tracing=` and `project=`. Those are the values LangSmith will use. A key in `.env` is ignored while `LANGSMITH_TRACING=false`.
 - **Traces appear in an unexpected project** — `LANGSMITH_PROJECT` in the existing `.env` overrides the example value.
 - **The clock tool was not called** — open the `decide_tool_use` child run. The model is instructed to call the tool only for date and time questions. Retry with `What is the current date and time?`.
-- **Tool called for an MLOps question** — the same child run shows the tool decision. Tighten nothing in code for a one-off miss; it is the model's choice. The evaluation `tool_selection` score records how often it happens.
+- **Tool called for a general question** — the same child run shows the tool decision. Tighten nothing in code for a one-off miss; it is the model's choice. The evaluation `tool_selection` score records how often it happens.
 - **Evaluation cannot start** — `python scripts/evaluate.py` exits with code 2 until `OPENAI_API_KEY` is set. `pytest` still checks the scoring functions offline.
 
 ## Limitations

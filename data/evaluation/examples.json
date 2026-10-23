@@ -1,41 +1,41 @@
 [
   {
-    "inputs": {"question": "What is MLOps?"},
+    "inputs": {"question": "What is the capital of France?"},
     "outputs": {
       "expect_tool": false,
       "expect_error": false,
       "category": "general",
-      "criteria": "Explains MLOps as the practice of deploying, monitoring, and maintaining machine learning systems."
+      "criteria": "Names Paris as the capital of France. A short answer is enough."
     },
     "metadata": {"category": "general"}
   },
   {
-    "inputs": {"question": "What is a machine learning model registry used for?"},
+    "inputs": {"question": "Explain photosynthesis in one or two sentences."},
     "outputs": {
       "expect_tool": false,
       "expect_error": false,
       "category": "general",
-      "criteria": "Describes a model registry as a place to store, version, and promote trained models."
+      "criteria": "Explains photosynthesis as plants using light to turn carbon dioxide and water into sugar and oxygen, in one or two sentences."
     },
     "metadata": {"category": "general"}
   },
   {
-    "inputs": {"question": "Explain model drift in one or two sentences."},
+    "inputs": {"question": "Give me a simple packing list for a weekend trip."},
     "outputs": {
       "expect_tool": false,
       "expect_error": false,
       "category": "general",
-      "criteria": "Explains model drift as a change in data or the relationship between inputs and the target that degrades a deployed model."
+      "criteria": "Lists practical items to pack for a short trip, such as clothes, toiletries, and essentials. Does not report the current time."
     },
     "metadata": {"category": "general"}
   },
   {
-    "inputs": {"question": "What is CI/CD for machine learning?"},
+    "inputs": {"question": "What is a time zone?"},
     "outputs": {
       "expect_tool": false,
       "expect_error": false,
       "category": "general",
-      "criteria": "Describes continuous integration and continuous delivery for machine learning pipelines, not the current time."
+      "criteria": "Explains a time zone as a region that shares the same clock offset from UTC. Does not report the current date or time."
     },
     "metadata": {"category": "general"}
   },
